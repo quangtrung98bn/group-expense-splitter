@@ -5,10 +5,21 @@ import { cn } from "@/lib/utils";
 interface IOSSwitchProps extends React.InputHTMLAttributes<HTMLInputElement> {
   className?: string;
   label?: string;
+  onCheckedChange?: (checked: boolean) => void;
 }
 
 const IOSSwitch = React.forwardRef<HTMLInputElement, IOSSwitchProps>(
-  ({ className, label, ...props }, ref) => {
+  ({ className, label, onCheckedChange, onChange, checked, ...props }, ref) => {
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      // Call both handlers if they exist
+      if (onChange) {
+        onChange(event);
+      }
+      if (onCheckedChange) {
+        onCheckedChange(event.target.checked);
+      }
+    };
+
     return (
       <div className="flex items-center gap-2">
         <label
@@ -18,6 +29,8 @@ const IOSSwitch = React.forwardRef<HTMLInputElement, IOSSwitchProps>(
             type="checkbox"
             className="peer sr-only"
             ref={ref}
+            onChange={handleChange}
+            checked={checked}
             {...props}
           />
           <div

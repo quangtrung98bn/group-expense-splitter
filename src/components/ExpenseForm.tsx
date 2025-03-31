@@ -32,16 +32,13 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
   );
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  // Update individual expenses when participants change
   useEffect(() => {
     if (splitEqually) return;
 
-    // Keep only current participants
     const updatedExpenses = individualExpenses.filter(exp => 
       participants.includes(exp.person)
     );
     
-    // Add any new participants with 0 amount
     participants.forEach(person => {
       if (!updatedExpenses.some(exp => exp.person === person)) {
         updatedExpenses.push({ person, amount: 0 });
@@ -51,7 +48,6 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
     setIndividualExpenses(updatedExpenses);
   }, [participants]);
 
-  // Calculate equal split when toggling or when participants/amount changes
   useEffect(() => {
     if (splitEqually && participants.length > 0) {
       const equalShare = amount / participants.length;
@@ -134,7 +130,6 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
       addExpense(expenseData);
     }
     
-    // Reset form if not editing
     if (!isEditing) {
       setName("");
       setAmount(0);
